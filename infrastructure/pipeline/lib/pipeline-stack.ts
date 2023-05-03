@@ -15,15 +15,21 @@ export class PipelineStack extends Stack {
     
     //pipeline declaration. With the following steps: 1. Pull the code from the repository. 2. Build the code.
     const pipeline = new CodePipeline(this, 'pipeline', {
-      pipelineName: 'cdk-pipeline-demo',  
+      pipelineName: 'cdk-pipeline-ts',  
       synth: new CodeBuildStep('Synth', {
-        input: CodePipelineSource.codeCommit(repo, 'master'),
+        input: CodePipelineSource.codeCommit(repo, 'main'),
+        installCommands: [
+          'npm install -g aws-cdk'
+        ],
         commands: [
+          'cd infrastructure/pipeline',
           'npm ci',
           'npm run build',  
           'npx cdk synth'
-        ]
-      })
+        ],
+        //set base-directory in artifacts section infrastructure/pipeline/cdk.out to avoid synth error when running the pipeline  
+        primaryOutputDirectory: 'infrastructure/pipeline/cdk.out'
+      }),  
     });
 
   }
