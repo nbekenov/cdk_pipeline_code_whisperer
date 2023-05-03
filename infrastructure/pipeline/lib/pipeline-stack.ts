@@ -24,14 +24,15 @@ export class PipelineStack extends Stack {
         commands: [
           'cd infrastructure/pipeline',
           'npm ci',
-          'npm run build',  
+          'npm run build',
+          'npx npm test',
           'npx cdk synth'
         ],
-        //set base-directory in artifacts section infrastructure/pipeline/cdk.out to avoid synth error when running the pipeline  
+        //set primaryOutputDirectory as infrastructure/pipeline/cdk.out
+        //this is where the CDK will place the output artifacts
         primaryOutputDirectory: 'infrastructure/pipeline/cdk.out'
       }),  
     });
-
   }
 }
 
